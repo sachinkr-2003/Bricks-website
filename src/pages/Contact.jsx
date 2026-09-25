@@ -12,15 +12,52 @@ const Contact = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleFormSubmit = (e) => {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    phone: '',
+    email: '',
+    projectType: '',
+    message: ''
+  });
+
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    Swal.fire({
-      title: 'Request Sent Successfully!',
-      text: 'One of our chief engineers will contact you shortly.',
-      icon: 'success',
-      confirmButtonColor: '#ea580c',
-      confirmButtonText: 'Great, thanks!'
-    });
+    try {
+      const payload = {
+        name: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        phone: formData.phone,
+        message: `Project Type: ${formData.projectType}\nDetails: ${formData.message}`
+      };
+      
+      const response = await fetch('http://localhost:5000/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (response.ok) {
+        Swal.fire({
+          title: 'Request Sent Successfully!',
+          text: 'One of our chief engineers will contact you shortly.',
+          icon: 'success',
+          confirmButtonColor: '#ea580c',
+          confirmButtonText: 'Great, thanks!'
+        });
+        setFormData({ firstName: '', lastName: '', phone: '', email: '', projectType: '', message: '' });
+      }
+    } catch (error) {
+       Swal.fire({
+          title: 'Error',
+          text: 'Failed to send request. Please try again.',
+          icon: 'error',
+       });
+    }
   };
 
   const faqs = [
@@ -127,39 +164,39 @@ const Contact = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-bold tracking-widest text-slate-400 uppercase mb-1">First Name</label>
-                      <input type="text" className="w-full bg-slate-50 border border-slate-200 px-4 py-2 focus:bg-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all font-medium" placeholder="Ex. Rahul" />
+                      <input type="text" name="firstName" value={formData.firstName} onChange={handleInputChange} required className="w-full bg-slate-50 border border-slate-200 px-4 py-2 focus:bg-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all font-medium" placeholder="Ex. Rahul" />
                     </div>
                     <div>
                       <label className="block text-xs font-bold tracking-widest text-slate-400 uppercase mb-1">Last Name</label>
-                      <input type="text" className="w-full bg-slate-50 border border-slate-200 px-4 py-2 focus:bg-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all font-medium" placeholder="Ex. Sharma" />
+                      <input type="text" name="lastName" value={formData.lastName} onChange={handleInputChange} required className="w-full bg-slate-50 border border-slate-200 px-4 py-2 focus:bg-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all font-medium" placeholder="Ex. Sharma" />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-bold tracking-widest text-slate-400 uppercase mb-1">Phone Number</label>
-                      <input type="tel" className="w-full bg-slate-50 border border-slate-200 px-4 py-2 focus:bg-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all font-medium" placeholder="+91 00000 00000" />
+                      <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} required className="w-full bg-slate-50 border border-slate-200 px-4 py-2 focus:bg-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all font-medium" placeholder="+91 00000 00000" />
                     </div>
                     <div>
                       <label className="block text-xs font-bold tracking-widest text-slate-400 uppercase mb-1">Email Address</label>
-                      <input type="email" className="w-full bg-slate-50 border border-slate-200 px-4 py-2 focus:bg-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all font-medium" placeholder="your@email.com" />
+                      <input type="email" name="email" value={formData.email} onChange={handleInputChange} required className="w-full bg-slate-50 border border-slate-200 px-4 py-2 focus:bg-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all font-medium" placeholder="your@email.com" />
                     </div>
                   </div>
 
                   <div>
                     <label className="block text-xs font-bold tracking-widest text-slate-400 uppercase mb-1">Project Type</label>
-                    <select className="w-full bg-slate-50 border border-slate-200 px-4 py-2 focus:bg-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all font-medium text-slate-700">
-                      <option>Select a project type...</option>
-                      <option>Residential construction</option>
-                      <option>Commercial construction</option>
-                      <option>Renovation & Upgrade</option>
-                      <option>Other</option>
+                    <select name="projectType" value={formData.projectType} onChange={handleInputChange} required className="w-full bg-slate-50 border border-slate-200 px-4 py-2 focus:bg-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all font-medium text-slate-700">
+                      <option value="">Select a project type...</option>
+                      <option value="Residential construction">Residential construction</option>
+                      <option value="Commercial construction">Commercial construction</option>
+                      <option value="Renovation & Upgrade">Renovation & Upgrade</option>
+                      <option value="Other">Other</option>
                     </select>
                   </div>
 
                   <div>
                     <label className="block text-xs font-bold tracking-widest text-slate-400 uppercase mb-1">Message</label>
-                    <textarea rows="3" className="w-full bg-slate-50 border border-slate-200 px-4 py-2 focus:bg-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all font-medium" placeholder="Briefly describe plot size, location, and requirements..."></textarea>
+                    <textarea name="message" value={formData.message} onChange={handleInputChange} required rows="3" className="w-full bg-slate-50 border border-slate-200 px-4 py-2 focus:bg-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all font-medium" placeholder="Briefly describe plot size, location, and requirements..."></textarea>
                   </div>
 
                   <button type="submit" className="w-full bg-orange-600 text-white font-bold py-3 flex justify-center items-center gap-2 hover:bg-slate-900 transition-colors shadow-lg shadow-orange-600/30">

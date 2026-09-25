@@ -1,9 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, HardHat } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
+  
+  const getDesktopClass = (path) => 
+    location.pathname === path 
+      ? "px-4 py-2 rounded-full text-sm font-semibold text-orange-600 bg-orange-50 transition-colors"
+      : "px-4 py-2 rounded-full text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors";
+      
+  const getMobileClass = (path) =>
+    location.pathname === path
+      ? "bg-orange-50 text-orange-600 block px-4 py-3 rounded-2xl text-base font-semibold"
+      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 block px-4 py-3 rounded-2xl text-base font-medium";
 
   // Add scroll effect for dynamic styling
   useEffect(() => {
@@ -40,25 +52,25 @@ const Navbar = () => {
 
             {/* Desktop Links - Centered */}
             <div className="hidden md:flex items-center space-x-1">
-              <a href="/" className="px-4 py-2 rounded-full text-sm font-semibold text-orange-600 bg-orange-50 transition-colors">
+              <Link to="/" className={getDesktopClass('/')}>
                 Home
-              </a>
-              <a href="/services" className="px-4 py-2 rounded-full text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors">
+              </Link>
+              <Link to="/services" className={getDesktopClass('/services')}>
                 Services
-              </a>
-              <a href="/projects" className="px-4 py-2 rounded-full text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors">
+              </Link>
+              <Link to="/projects" className={getDesktopClass('/projects')}>
                 Projects
-              </a>
-              <a href="/about" className="px-4 py-2 rounded-full text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors">
+              </Link>
+              <Link to="/about" className={getDesktopClass('/about')}>
                 About Us
-              </a>
+              </Link>
             </div>
 
             {/* Desktop CTA & Contact */}
             <div className="hidden md:flex items-center space-x-4">
-              <a href="/contact" className="bg-orange-600 text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-orange-700 transition-transform transform hover:-translate-y-0.5 shadow-md hover:shadow-lg">
+              <Link to="/contact" className="bg-orange-600 text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-orange-700 transition-transform transform hover:-translate-y-0.5 shadow-md hover:shadow-lg">
                 Contact Us
-              </a>
+              </Link>
             </div>
 
             {/* Mobile menu button */}
@@ -81,15 +93,15 @@ const Navbar = () => {
         >
           <div className="mx-4 bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
             <div className="px-4 pt-4 pb-3 space-y-1">
-              <a href="/" className="bg-orange-50 text-orange-600 block px-4 py-3 rounded-2xl text-base font-semibold">Home</a>
-              <a href="/services" className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 block px-4 py-3 rounded-2xl text-base font-medium">Services</a>
-              <a href="/projects" className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 block px-4 py-3 rounded-2xl text-base font-medium">Projects</a>
-              <a href="/about" className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 block px-4 py-3 rounded-2xl text-base font-medium">About Us</a>
+              <Link to="/" className={getMobileClass('/')}>Home</Link>
+              <Link to="/services" className={getMobileClass('/services')}>Services</Link>
+              <Link to="/projects" className={getMobileClass('/projects')}>Projects</Link>
+              <Link to="/about" className={getMobileClass('/about')}>About Us</Link>
             </div>
             <div className="p-4 bg-gray-50 flex flex-col gap-3">
-              <a href="/contact" className="w-full text-center bg-orange-600 text-white px-4 py-3.5 rounded-2xl font-bold shadow-md active:scale-95 transition-transform">
+              <Link to="/contact" className="w-full text-center bg-orange-600 text-white px-4 py-3.5 rounded-2xl font-bold shadow-md active:scale-95 transition-transform">
                 Contact Us
-              </a>
+              </Link>
             </div>
           </div>
         </div>

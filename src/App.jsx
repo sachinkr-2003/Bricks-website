@@ -8,6 +8,7 @@ import Services from './pages/Services';
 import Projects from './pages/Projects';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import WhatsAppButton from './components/WhatsAppButton';
 import './App.css';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>
+      <WhatsAppButton />
     </BrowserRouter>
   );
 }
