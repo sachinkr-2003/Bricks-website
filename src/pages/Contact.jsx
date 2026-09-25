@@ -35,7 +35,8 @@ const Contact = () => {
         message: `Project Type: ${formData.projectType}\nDetails: ${formData.message}`
       };
       
-      const response = await fetch('http://localhost:5000/api/leads', {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+      const response = await fetch(`${apiUrl}/leads`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
