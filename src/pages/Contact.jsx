@@ -35,7 +35,8 @@ const Contact = () => {
         message: `Project Type: ${formData.projectType}\nDetails: ${formData.message}`
       };
       
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+      // Using live render backend as fallback if Vercel misses .env injection
+      const apiUrl = import.meta.env.VITE_API_URL || 'https://bricks-backend-fk3q.onrender.com/api';
       const response = await fetch(`${apiUrl}/leads`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
